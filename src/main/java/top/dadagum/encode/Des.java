@@ -89,8 +89,8 @@ public class Des {
 
             // 进行明文的变换
             // 拷贝一份LR
-            SimpleBitString bR = text.R().copy();
-            SimpleBitString bL = text.L().copy();
+            BitString bR = text.R().copy();
+            BitString bL = text.L().copy();
             // R进行扩充变换
             bR.replace(Mapping.E);
             // 和pk进行异或操作
@@ -107,7 +107,7 @@ public class Des {
             text.setR((SimpleBitString) tmp1);
         }
         // 左右互换得到预输出
-        SimpleBitString bR = text.R();
+        BitString bR = text.R();
         text.setR(text.L());
         text.setL(bR);
         // 进行逆初始置换，得到最终密文

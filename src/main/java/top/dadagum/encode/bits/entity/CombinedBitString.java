@@ -10,8 +10,8 @@ import top.dadagum.encode.bits.SimpleBitString;
  **/
 public class CombinedBitString implements BitString {
     
-    protected SimpleBitString L;
-    protected SimpleBitString R;
+    protected BitString L;
+    protected BitString R;
     protected int partSize; // 对半分
 
     public CombinedBitString(byte[] bits) {
@@ -20,25 +20,25 @@ public class CombinedBitString implements BitString {
         R = new SimpleBitString(bits, partSize, partSize);
     }
 
-    public CombinedBitString(SimpleBitString l, SimpleBitString r) {
+    public CombinedBitString(BitString l, BitString r) {
         this.partSize = l.length();
         this.L = l;
         this.R = r;
     }
 
-    public SimpleBitString L() {
+    public BitString L() {
         return L;
     }
 
-    public SimpleBitString R() {
+    public BitString R() {
         return R;
     }
 
-    public void setL(SimpleBitString l) {
+    public void setL(BitString l) {
         this.L = l;
     }
 
-    public void setR(SimpleBitString r) {
+    public void setR(BitString r) {
         this.R = r;
     }
 
@@ -75,8 +75,8 @@ public class CombinedBitString implements BitString {
     public void replace(int[] mapping) {
         int newPartSize = mapping.length / 2;
       //  System.out.println("new PartSize = " + newPartSize + " partSize = " + partSize);
-        SimpleBitString tl = new SimpleBitString(new byte[newPartSize]);
-        SimpleBitString tr = new SimpleBitString(new byte[newPartSize]);
+        BitString tl = new SimpleBitString(new byte[newPartSize]);
+        BitString tr = new SimpleBitString(new byte[newPartSize]);
         for (int i = 0; i < newPartSize; i++) {
             //System.out.print(mapping[i] + " ");
             // 主要需要判断需要的数位在L还是R

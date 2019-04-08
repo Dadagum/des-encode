@@ -47,7 +47,7 @@ public class SimpleBitString implements BitString {
     /**
      * 得到当前比特串的副本(返回协变)
      */
-    public SimpleBitString copy() {
+    public BitString copy() {
         byte[] tmp = new byte[length];
         System.arraycopy(bits, 0, tmp, 0, length);
         return new SimpleBitString(tmp);

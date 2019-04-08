@@ -1,5 +1,6 @@
 package top.dadagum.encode.bits.entity;
 
+import top.dadagum.encode.bits.BitString;
 import top.dadagum.encode.bits.SimpleBitString;
 
 /**
@@ -13,14 +14,14 @@ public class PrivateKey extends CombinedBitString {
         super(bits);
     }
 
-    public PrivateKey(SimpleBitString l, SimpleBitString r) {
+    public PrivateKey(BitString l, BitString r) {
         super(l, r);
     }
 
     @Override
     public PrivateKey copy() {
-        SimpleBitString l = L.copy();
-        SimpleBitString r = R.copy();
+        BitString l = L.copy();
+        BitString r = R.copy();
         return new PrivateKey(l, r);
     }
 }
