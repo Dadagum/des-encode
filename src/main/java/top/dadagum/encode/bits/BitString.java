@@ -24,4 +24,21 @@ public interface BitString {
      * @param value 0 或者 1
      */
     void set(int pos, byte value);
+
+    /**
+     * 置换操作（初始置换 / 选择置换 / 扩展置换）
+     * @param mapping 映射表
+     */
+    void replace(int[] mapping);
+
+    /**
+     * 得到当前比特串的副本
+     */
+    BitString copy();
+
+    /**
+     * 比特串进行左移动
+     * @param cnt 移动位数
+     */
+    void shiftLeft(int cnt);
 }

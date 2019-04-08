@@ -17,7 +17,6 @@ public class SimpleBitString implements BitString {
         length = bits.length;
     }
 
-
     public SimpleBitString(byte[] bits, int start, int length) {
         this.bits = new byte[length];
         this.length = length;
@@ -36,13 +35,36 @@ public class SimpleBitString implements BitString {
         bits[pos] = value;
     }
 
+    public void replace(int[] mapping) {
+        byte[] bytes = new byte[mapping.length];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = bits[mapping[i]];
+        }
+        bits = bytes;
+    }
+
     /**
-     * 得到当前比特串的副本
+     * 得到当前比特串的副本(返回协变)
      */
     public SimpleBitString copy() {
         byte[] tmp = new byte[length];
         System.arraycopy(bits, 0, tmp, 0, length);
         return new SimpleBitString(tmp);
+    }
+
+    /**
+     * 循环左移操作
+     * @param cnt 左移步数
+     */
+    public void shiftLeft(int cnt) {
+        byte[] bytes = new byte[length];
+        for (int i = 0; i < length - cnt; i++) {
+            bytes[i] = bits[i+cnt];
+        }
+        for (int i = length - cnt, j = 0; i < length; i++, j++) {
+            bytes[i] = bits[j];
+        }
+        bits = bytes;
     }
 
 }

@@ -45,4 +45,14 @@ public class Mapping {
      * 密钥左移动轮次
      */
     public static final int[] ROUND = {};
+
+    /**
+     * 明文的扩充置换映射表
+     */
+    public static final int[] E = {};
+
+    /**
+     * 明文的置换P映射表
+     */
+    public static final int[] P = {};
 }

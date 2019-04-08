@@ -7,8 +7,6 @@ import top.dadagum.encode.bits.SimpleBitString;
  * @Description 比特串工具类
  * 功能：
  * 1. 比特串的异或操作
- * 2. 置换操作（初始置换 / 选择置换 / 扩展置换）
- * 3. 比特串的批量拷贝
  * 默认返回的比特串都是SimpleBitString类型
  * @Author Honda
  * @Date 2019/4/7 23:59
@@ -28,19 +26,4 @@ public class BitStringUtils {
         }
         return new SimpleBitString(bytes);
     }
-
-    /**
-     * 置换操作
-     * @param mapping 映射表
-     * @param bits 原比特串
-     * @return 返回置换后的新的比特串
-     */
-    public static BitString replaceAndGet(int[] mapping, BitString bits) {
-        byte[] bytes = new byte[mapping.length];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = bits.at(mapping[i]);
-        }
-        return new SimpleBitString(bytes);
-    }
-
 }
