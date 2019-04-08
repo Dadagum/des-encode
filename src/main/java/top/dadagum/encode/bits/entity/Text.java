@@ -1,6 +1,7 @@
 package top.dadagum.encode.bits.entity;
 
 import top.dadagum.encode.bits.BitString;
+import top.dadagum.encode.bits.SimpleBitString;
 
 /**
  * @Description 明文
@@ -11,12 +12,13 @@ public class Text implements BitString {
 
     private L l;
     private R r;
-    private byte[] bits;
     private static final int PART_SIZE = 32;
 
     public Text(byte[] bits_64) {
-        bits = bits_64;
+        l = new L(bits_64, 0, PART_SIZE);
+        r = new R(bits_64, PART_SIZE, PART_SIZE);
     }
+
 
     public L L() {
         return l;
@@ -49,13 +51,20 @@ public class Text implements BitString {
     }
 
     public void set(int pos, byte value) {
-        bits[pos] = value;
     }
 
     /**
      * R部分
      */
-    private class R implements BitString {
+    private class R extends SimpleBitString {
+
+        public R(byte[] bits) {
+            super(bits);
+        }
+
+        public R(byte[] bits, int start, int length) {
+            super(bits, start, length);
+        }
 
         public int length() {
             return PART_SIZE;
@@ -73,14 +82,22 @@ public class Text implements BitString {
     /**
      * L部分
      */
-    private class L implements BitString {
+    private class L extends SimpleBitString {
+
+        public L(byte[] bits) {
+            super(bits);
+        }
+
+        public L(byte[] bits, int start, int length) {
+            super(bits, start, length);
+        }
 
         public int length() {
             return PART_SIZE;
         }
 
         public byte at(int pos) {
-            return bits[pos + PART_SIZE];
+            return bits[pos];
         }
 
         public void set(int pos, byte value) {
