@@ -19,6 +19,10 @@ public class PrivateKey implements BitString {
         D = new SimpleBitString(bits_64, PART_SIZE, PART_SIZE);
     }
 
+    public PrivateKey(BitString c, BitString d) {
+        this.C = c;
+        this.D = d;
+    }
 
     public BitString C() {
         return C;

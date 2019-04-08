@@ -19,6 +19,10 @@ public class Text implements BitString {
         R = new SimpleBitString(bits_64, PART_SIZE, PART_SIZE);
     }
 
+    public Text(BitString l, BitString r) {
+        this.L = l;
+        this.R = r;
+    }
 
     public BitString L() {
         return L;

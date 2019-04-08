@@ -35,4 +35,14 @@ public class SimpleBitString implements BitString {
     public void set(int pos, byte value) {
         bits[pos] = value;
     }
+
+    /**
+     * 得到当前比特串的副本
+     */
+    public SimpleBitString copy() {
+        byte[] tmp = new byte[length];
+        System.arraycopy(bits, 0, tmp, 0, length);
+        return new SimpleBitString(tmp);
+    }
+
 }
