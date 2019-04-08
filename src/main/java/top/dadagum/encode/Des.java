@@ -83,6 +83,7 @@ public class Des {
      */
     private static BitString toSandBox(BitString bits) {
         byte[] bytes = new byte[Mapping.SAND_BOX.length * SB_OUT];
+        int curr = 0;
         for (int i = 0, s = 0; i < Mapping.SAND_BOX.length; i++, s += SB_IN) {
             int row = bits.at(s) * 2 + bits.at(s + SB_IN - 1);
             int column = 0;
@@ -91,8 +92,8 @@ public class Des {
             }
             int value = Mapping.SAND_BOX[i][SB_LEN * row + column];
             // 新的输出4位
-            for (int j = s + SB_OUT - 1; j >= s; j--) {
-                bytes[j] = (byte) (value & 1);
+            for (int j = 0; j < SB_OUT; j++) {
+                bytes[curr++] = (byte) (value & 1);
                 value = value >> 1;
             }
         }

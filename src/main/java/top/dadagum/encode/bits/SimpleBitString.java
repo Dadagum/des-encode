@@ -20,7 +20,7 @@ public class SimpleBitString implements BitString {
     public SimpleBitString(byte[] bits, int start, int length) {
         this.bits = new byte[length];
         this.length = length;
-        System.arraycopy(bits, start, bits, 0, length);
+        System.arraycopy(bits, start, this.bits, 0, length);
     }
 
     public int length() {
@@ -38,9 +38,10 @@ public class SimpleBitString implements BitString {
     public void replace(int[] mapping) {
         byte[] bytes = new byte[mapping.length];
         for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = bits[mapping[i]];
+            bytes[i] = bits[mapping[i]-1];
         }
         bits = bytes;
+        length = mapping.length;
     }
 
     /**

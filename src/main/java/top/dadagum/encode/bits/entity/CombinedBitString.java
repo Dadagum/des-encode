@@ -12,7 +12,7 @@ public class CombinedBitString implements BitString {
     
     protected SimpleBitString L;
     protected SimpleBitString R;
-    private int partSize; // 对半分
+    protected int partSize; // 对半分
 
     public CombinedBitString(byte[] bits) {
         this.partSize = bits.length / 2;
@@ -21,6 +21,7 @@ public class CombinedBitString implements BitString {
     }
 
     public CombinedBitString(SimpleBitString l, SimpleBitString r) {
+        this.partSize = l.length();
         this.L = l;
         this.R = r;
     }
@@ -67,17 +68,30 @@ public class CombinedBitString implements BitString {
         }
     }
 
+    /**
+     * TODO
+     * 有bug的 原因在于partSize不同
+     * @param mapping 映射表
+     */
     public void replace(int[] mapping) {
-        SimpleBitString tl = new SimpleBitString(new byte[partSize]);
-        SimpleBitString tr = new SimpleBitString(new byte[partSize]);
-        for (int i = 0; i < partSize; i++) {
-            tl.set(i, L.at(mapping[i]));
+        int newPartSize = mapping.length / 2;
+      //  System.out.println("new PartSize = " + newPartSize + " partSize = " + partSize);
+        SimpleBitString tl = new SimpleBitString(new byte[newPartSize]);
+        SimpleBitString tr = new SimpleBitString(new byte[newPartSize]);
+        for (int i = 0; i < newPartSize; i++) {
+            //System.out.print(mapping[i] + " ");
+            // 主要需要判断需要的数位在L还是R
+            byte value = mapping[i] - 1 >= partSize ? R.at(mapping[i] - partSize - 1) : L.at(mapping[i] - 1);
+            tl.set(i, value);
         }
-        for (int i = 0; i < partSize; i++) {
-            tr.set(i, R.at(mapping[i + partSize]));
+        for (int i = 0; i < newPartSize; i++) {
+            //System.out.print(mapping[i + newPartSize] + " ");
+            byte value = mapping[i + newPartSize] - 1 >= partSize ? R.at(mapping[i + newPartSize] - partSize - 1) : L.at(mapping[i + newPartSize] - 1);
+            tr.set(i, value);
         }
         L = tl;
         R = tr;
+        partSize = newPartSize;
     }
 
     public BitString copy() {
