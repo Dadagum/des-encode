@@ -30,12 +30,50 @@ public class Des {
     private static final int SB_OUT = 4;
 
     /**
-     * 对明文进行des加密
-     * @param text 明文
-     * @param key 密钥
+     * 明文和密钥的输入的比特位数
+     */
+    private static final int INPUT_LEN = 64;
+
+    /**
+     * 简单对8字节的text用8字节的key加密
+     * @param text 8字节
+     * @param key 8字节
      * @return 密文
      */
-    public static void encode(Text text, PrivateKey key) {
+    public static String encode(String text, String key) {
+        byte[] tb = text.getBytes();
+        byte[] kb = key.getBytes();
+        byte[] rawText = new byte[INPUT_LEN];
+        byte[] privateKey = new byte[INPUT_LEN];
+        for (int i = 0, curr = 0; i < tb.length; i++, curr += 8) {
+            for (int j = 7; j >= 0; j--) {
+                rawText[curr + j] = (byte) (tb[i] & 1);
+                privateKey[curr + j] = (byte) (kb[i] & 1);
+                tb[i] >>= 1;
+                kb[i] >>= 1;
+            }
+        }
+        byte[] encoded = encode(rawText, privateKey);
+        char[] chars = new char[8];
+        for (int i = 0, curr = 0; i < 8; i++, curr += 8) {
+            int sum = 0;
+            for (int j = 0; j < 8; j++) {
+                sum = sum * 2 + encoded[curr+j];
+            }
+            chars[i] = (char) sum;
+        }
+        return new String(chars);
+    }
+
+    /**
+     * 对明文进行des加密
+     * @param rawText 明文
+     * @param privateKey 密钥
+     * @return 密文
+     */
+    public static byte[] encode(byte[] rawText, byte[] privateKey) {
+        Text text = new Text(rawText);
+        PrivateKey key = new PrivateKey(privateKey);
         text.replace(Mapping.IR); // 明文的初始置换
         key.replace(Mapping.RS_ONE); // 密钥的置换选择
         // 进行16轮
@@ -74,6 +112,7 @@ public class Des {
         text.setL(bR);
         // 进行逆初始置换，得到最终密文
         text.replace(Mapping.REVERSE_IR);
+        return text.getBytes();
     }
 
     /**

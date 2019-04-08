@@ -20,7 +20,7 @@ public class Text extends CombinedBitString {
     /**
      * 得到比特串的实际值
      */
-    public byte[] getByte() {
+    public byte[] getBytes() {
         byte[] tmp = new byte[2*partSize];
         for (int i = 0; i < partSize; i++) {
             tmp[i] = L.at(i);

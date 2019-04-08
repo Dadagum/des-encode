@@ -69,8 +69,7 @@ public class CombinedBitString implements BitString {
     }
 
     /**
-     * TODO
-     * 有bug的 原因在于partSize不同
+     * 置换操作
      * @param mapping 映射表
      */
     public void replace(int[] mapping) {

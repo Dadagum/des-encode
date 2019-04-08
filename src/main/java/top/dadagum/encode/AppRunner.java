@@ -43,12 +43,11 @@ public class AppRunner {
      * @param args
      */
     public static void main(String[] args) {
-        Text text = new Text(text2);
-        PrivateKey privateKey = new PrivateKey(pk);
-        Des.encode(text, privateKey);
-        byte[] encoded = text.getByte();
-        for (int i = 0; i < encoded.length; i++) {
-            System.out.print(encoded[i] + " ");
-        }
+//        byte[] encoded = Des.encode(text1, pk);
+//        for (int i = 0; i < encoded.length; i++) {
+//            System.out.print(encoded[i] + " ");
+//        }
+        String encoded2 = Des.encode("12345678", "12345678");
+        System.out.println(encoded2);
     }
 }
