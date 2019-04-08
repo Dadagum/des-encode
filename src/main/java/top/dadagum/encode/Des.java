@@ -35,7 +35,7 @@ public class Des {
      * @param key 密钥
      * @return 密文
      */
-    public static Text encode(Text text, PrivateKey key) {
+    public static void encode(Text text, PrivateKey key) {
         text.replace(Mapping.IR); // 明文的初始置换
         key.replace(Mapping.RS_ONE); // 密钥的置换选择
         // 进行16轮
@@ -50,17 +50,30 @@ public class Des {
             pk.replace(Mapping.RS_TWO);
 
             // 进行明文的变换
-            // 拷贝一份R
+            // 拷贝一份LR
             SimpleBitString bR = text.R().copy();
+            SimpleBitString bL = text.L().copy();
             // R进行扩充变换
             bR.replace(Mapping.E);
             // 和pk进行异或操作
             BitString tmp1 = BitStringUtils.XOR(pk, bR);
-            //
+            // 沙盒操作
+            tmp1 = toSandBox(tmp1);
+            // 进行置换P
+            tmp1.replace(Mapping.P);
+            // bL和tmp1进行异或
+            tmp1 = BitStringUtils.XOR(tmp1, bL);
 
+            // 得到新一轮的“明文”
+            text.setL(bR);
+            text.setR((SimpleBitString) tmp1);
         }
-
-        return null;
+        // 左右互换得到预输出
+        SimpleBitString bR = text.R();
+        text.setR(text.L());
+        text.setL(bR);
+        // 进行逆初始置换，得到最终密文
+        text.replace(Mapping.REVERSE_IR);
     }
 
     /**
@@ -68,7 +81,7 @@ public class Des {
      * @param bits
      * @return
      */
-    private BitString toSandBox(BitString bits) {
+    private static BitString toSandBox(BitString bits) {
         byte[] bytes = new byte[Mapping.SAND_BOX.length * SB_OUT];
         for (int i = 0, s = 0; i < Mapping.SAND_BOX.length; i++, s += SB_IN) {
             int row = bits.at(s) * 2 + bits.at(s + SB_IN - 1);
@@ -77,11 +90,12 @@ public class Des {
                 column = column * 2 + bits.at(j);
             }
             int value = Mapping.SAND_BOX[i][SB_LEN * row + column];
-            for (int j = s + SB_OUT - 1; j >= 0; j--) {
-               // bytes[j] =
+            // 新的输出4位
+            for (int j = s + SB_OUT - 1; j >= s; j--) {
+                bytes[j] = (byte) (value & 1);
+                value = value >> 1;
             }
         }
-
-        return null;
+        return new SimpleBitString(bytes);
     }
 }
